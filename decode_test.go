@@ -1,6 +1,7 @@
 package csv
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 )
@@ -16,6 +17,7 @@ type Q struct {
 }
 
 func TestUnmarshal(t *testing.T) {
+
 	doc := []byte(`String,Int,unexported,Bool,Float32,Float64,C64
 John,23,1,Yes,32.2,64.1,1
 Jane,27,2,No,33.1,65.1,2
@@ -48,6 +50,8 @@ Bill,28,3,Yes,34.7,65.1,3`)
 		assert(f32s[i], p.Float32)
 		assert(f64s[i], p.Float64)
 	}
+
+	fmt.Println(pp)
 
 }
 

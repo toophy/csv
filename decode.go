@@ -56,14 +56,13 @@ type Unmarshaler interface {
 // Supported Types
 //
 // string, int, float and bool are supported. Any type which implements Unmarshal is also supported.
-func Unmarshal(doc []byte, v interface{}) error {
+func Unmarshal(comma rune, trimLeadingSpace bool, doc []byte, v interface{}) error {
 	rv, err := checkForSlice(v)
 
 	if err != nil {
 		return err
 	}
-
-	dec, err := newDecoder(doc, rv)
+	dec, err := newDecoder(comma, trimLeadingSpace, doc, rv)
 
 	if err != nil {
 		return err
@@ -201,9 +200,11 @@ func exportedFields(t reflect.Type) []*reflect.StructField {
 
 }
 
-func newDecoder(doc []byte, rv reflect.Value) (*decoder, error) {
+func newDecoder(comma rune, trimLeadingSpace bool, doc []byte, rv reflect.Value) (*decoder, error) {
 	b := bytes.NewReader(doc)
 	r := csv.NewReader(b)
+	r.Comma = comma
+	r.TrimLeadingSpace = trimLeadingSpace
 	cols, err := r.Read()
 
 	if err != nil {
